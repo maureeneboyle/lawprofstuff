@@ -1,4 +1,4 @@
-# lawprofstuff
+# zoterocasecreator
 
 Two Agent Skills for Claude that turn U.S. case citations into clean Zotero
 records, following Bluebook academic (law-review footnote) style.
