@@ -53,6 +53,31 @@ belong only in documents filed in a court whose local rules require them
     `L. Ed.`
   - **State cases:** keep the regional reporter (e.g., `N.E.`, `P.`, `A.`, and their
     numbered series) per Table T1; drop the official state reporter.
+- **Renumbered/nominative reporters are NOT parallel citations — never drop the
+  nominative.** Under Bluebook **Rule 10.3.2 ("Renumbered and Nominative Reporters")**,
+  a reporter named for its reporter of decisions is the *same* reporter as the modern
+  official one, not a parallel cite. This applies to early SCOTUS **and** some early
+  state reports. There are two patterns; Table T1 (T1.1 for SCOTUS, T1.3 per state)
+  tells you which applies:
+  - **Renumbered into a consecutive official series → keep the nominative
+    PARENTHETICALLY.** The reporter-named volumes were folded into the modern numbered
+    series with identical star pagination, so cite the modern volume with the nominative
+    in parens: SCOTUS vols. 1–90 (`Dall.`, `Cranch`, `Wheat.`, `Pet.`, `Black`, `How.`,
+    `Wall.`) → `77 U.S. (10 Wall.) 497`, never bare `77 U.S. 497`; Massachusetts
+    (`Tyng`, `Pick.`, `Met.`, `Allen`, …) → `20 Mass. (3 Pick.) 304`; likewise a few
+    others (e.g., Me., N.H.). The tell: the nominative sits in parentheses *between*
+    the modern volume and the page. To represent it in CSL there is no dedicated field —
+    fold the nominative into `container-title` (Reporter): `"U.S. (10 Wall.)"` /
+    `"Mass. (3 Pick.)"`, with `volume` = `"77"` / `"20"` and `page` = `"497"` / `"304"`;
+    the style renders volume → reporter → page.
+  - **Never renumbered → cite the nominative reporter DIRECTLY, no parenthetical.** Many
+    states (e.g., New York: `Cai. R.`, `Johns.`, `Cow.`, `Wend.`, `Hill`) never created a
+    consecutive series, so the nominative *is* the reporter: `3 Cai. R. 175`,
+    `22 Wend. 285`. Here `container-title` = `"Wend."`, no parenthetical; add the court
+    to the parenthetical since the reporter doesn't convey it (`"N.Y."`).
+  - Contrast with a true parallel (`S. Ct.`, `L. Ed.`, a still-published official state
+    reporter): those are separate volume-reporter-page runs and ARE dropped. If unsure
+    whether a state renumbered, keep the citation as given and flag it for a T1.3 check.
 - After dropping a reporter, re-check the court/date parenthetical. Dropping a
   reporter can remove the signal that conveyed the jurisdiction, so add the court or
   state abbreviation back if the surviving reporter's title no longer conveys it
@@ -69,7 +94,7 @@ belong only in documents filed in a court whose local rules require them
 |-------------------|-------------------|-------------------------------------------------|
 | `type`            | (item type)       | always `"legal_case"`                           |
 | `title`           | Case Name         | e.g., `"Pierson v. Post"`                        |
-| `container-title` | Reporter          | abbreviated, e.g., `"U.S."`, `"F. Cas."`, `"N.E."` |
+| `container-title` | Reporter          | abbreviated, e.g., `"U.S."`, `"F. Cas."`, `"N.E."`; for renumbered nominative reporters fold in the nominative: `"U.S. (10 Wall.)"`, `"Mass. (3 Pick.)"` |
 | `volume`          | Reporter Volume   | e.g., `"3"`                                      |
 | `page`            | First Page        | e.g., `"175"`                                    |
 | `authority`       | Court             | abbreviation, e.g., `"D. Mass."`; omit if conveyed by reporter |
@@ -135,3 +160,37 @@ Output record:
 ```
 
 Flag: dropped parallel cite `217 N.Y. 382`.
+
+## Example — nominative reporter (Rule 10.3.2)
+
+Input:
+
+```
+Pumpelly v. Green Bay & Mississippi Canal Co., 80 U.S. (13 Wall.) 166 (1871)
+```
+
+`(13 Wall.)` is a nominative reporter, **not** a parallel cite: it is the same
+reporter as `U.S.` (Wallace is part of the renumbered U.S. Reports), so it is
+retained parenthetically, not dropped. There is no CSL field for the nominative, so
+it is folded into `container-title`. U.S. Reports conveys the Supreme Court, so
+`authority` stays empty.
+
+Output record:
+
+```json
+{
+  "id": "pumpelly-green-bay-1871",
+  "type": "legal_case",
+  "title": "Pumpelly v. Green Bay & Mississippi Canal Co.",
+  "container-title": "U.S. (13 Wall.)",
+  "volume": "80",
+  "page": "166",
+  "issued": { "date-parts": [[1871]] }
+}
+```
+
+Flag: nominative reporter retained per Rule 10.3.2 (not a droppable parallel).
+
+Contrast — a **non-renumbered** nominative like New York's Wendell is cited
+directly, with no parenthetical: `Hoffman v. Carow, 22 Wend. 285 (N.Y. 1839)` →
+`container-title` = `"Wend."`, `authority` = `"N.Y."`.
